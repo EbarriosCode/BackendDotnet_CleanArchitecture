@@ -1,4 +1,5 @@
-﻿using Countries.Common.Classes;
+﻿using Application.Interfaces;
+using Countries.Common.Classes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,12 +19,14 @@ namespace Countries.API.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
+        private readonly IJWTService _jwtService;
 
-        public AccountsController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration)
+        public AccountsController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration, IJWTService jwtService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _jwtService = jwtService;
         }
 
         [HttpPost]
@@ -47,7 +50,22 @@ namespace Countries.API.Controllers
 
                 return BadRequest(errors.ToString());
             }
+        }
 
-        }       
+        [HttpPost("Login")]
+        public async Task<ActionResult<UserToken>> Login([FromBody] UserInfo userInfo)
+        {
+            var result = await _signInManager.PasswordSignInAsync(userInfo.Email, userInfo.Password, isPersistent: false, lockoutOnFailure: false);
+
+            if (result.Succeeded)
+            {
+                return await this._jwtService.BuildToken(userInfo);
+            }
+            else
+            {
+                //ModelState.AddModelError("Error", "Intento de inicio de sesión no válido.");
+                return BadRequest("Intento de inicio de sesión no válido.");
+            }
+        }
     }
 }
