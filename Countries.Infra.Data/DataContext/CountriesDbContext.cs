@@ -9,6 +9,7 @@ namespace Countries.Infra.Data.DataContext
         public CountriesDbContext(DbContextOptions<CountriesDbContext> options)
             : base(options) { }
 
-        public DbSet<WeatherForecast> Forecast { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<Subdivision> Subdivisions { get; set; }
     }
 }

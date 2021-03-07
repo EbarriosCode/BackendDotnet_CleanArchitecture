@@ -4,71 +4,22 @@ using Countries.Infra.Data.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Countries.Infra.Data.Migrations
 {
     [DbContext(typeof(CountriesDbContext))]
-    partial class CountriesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210307180758_Initial_Schema_IdentityServer")]
+    partial class Initial_Schema_IdentityServer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Countries.Models.Models.Country", b =>
-                {
-                    b.Property<int>("CountryID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Alpha_2")
-                        .HasMaxLength(2)
-                        .HasColumnType("nvarchar(2)");
-
-                    b.Property<string>("Alpha_3")
-                        .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("NumericCode")
-                        .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)");
-
-                    b.HasKey("CountryID");
-
-                    b.ToTable("Country");
-                });
-
-            modelBuilder.Entity("Countries.Models.Models.Subdivision", b =>
-                {
-                    b.Property<int>("SubdivisonID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CountryID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.HasKey("SubdivisonID");
-
-                    b.HasIndex("CountryID");
-
-                    b.ToTable("Subdivison");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -266,17 +217,6 @@ namespace Countries.Infra.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Countries.Models.Models.Subdivision", b =>
-                {
-                    b.HasOne("Countries.Models.Models.Country", "Country")
-                        .WithMany("Subdivisions")
-                        .HasForeignKey("CountryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Country");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -326,11 +266,6 @@ namespace Countries.Infra.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Countries.Models.Models.Country", b =>
-                {
-                    b.Navigation("Subdivisions");
                 });
 #pragma warning restore 612, 618
         }
