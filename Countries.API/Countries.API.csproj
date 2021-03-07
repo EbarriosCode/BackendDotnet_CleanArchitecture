@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Countries.Common\Countries.Common.csproj" />
     <ProjectReference Include="..\Countries.Infra.Data\Countries.Infra.Data.csproj" />
     <ProjectReference Include="..\Countries.SPA\Countries.SPA.csproj" />
     <ProjectReference Include="..\IoC\IoC.csproj" />

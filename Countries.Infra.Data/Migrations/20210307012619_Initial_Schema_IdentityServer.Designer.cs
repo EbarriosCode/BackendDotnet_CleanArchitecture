@@ -4,14 +4,16 @@ using Countries.Infra.Data.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Countries.Infra.Data.Migrations
 {
     [DbContext(typeof(CountriesDbContext))]
-    partial class CountriesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210307012619_Initial_Schema_IdentityServer")]
+    partial class Initial_Schema_IdentityServer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
