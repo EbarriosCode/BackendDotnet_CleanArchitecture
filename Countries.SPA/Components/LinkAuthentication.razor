@@ -1,21 +1,9 @@
-﻿@inject NavigationManager Navigation
-@inject ILoginService loginService
-
-<AuthorizeView>
+﻿<AuthorizeView>
     <Authorized>
             <span>Hola, @context.User.Identity.Name!</span>
-            <a href="#" @onclick="Logout" class="nav-link btn btn-link">Salir</a>        
+            @*<a href="#" @onclick="Logout" class="nav-link btn btn-link">Salir</a>*@        
     </Authorized>
     <NotAuthorized>
         <a href="Login" class="nav-link btn btn-link">Entrar</a>
     </NotAuthorized>
 </AuthorizeView>
-
-@code
-{
-    private async Task Logout()
-    {
-        await loginService.Logout();
-        Navigation.NavigateTo("Login");
-    }
-}

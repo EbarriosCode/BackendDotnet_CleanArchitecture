@@ -77,6 +77,12 @@ namespace Countries.API
 
             // Init IoC Services
             DependencyContainer.AddDependency(services);
+
+            // EnableCors
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+            });
         }
 
         private async Task CreateRoles(IServiceProvider serviceProvider)
@@ -103,6 +109,7 @@ namespace Countries.API
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseCors(options => options.AllowAnyOrigin());
 
             app.UseAuthentication();
             app.UseAuthorization();
