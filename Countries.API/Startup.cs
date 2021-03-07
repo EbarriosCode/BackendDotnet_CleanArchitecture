@@ -62,7 +62,17 @@ namespace Countries.API
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Countries.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo 
+                { 
+                    Title = "Countries.API", 
+                    Version = "v1" ,
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Eduardo Barrios",
+                        Email = "dev_ingenieria@hotmail.com",
+                        Url = new Uri("https://twitter.com/ebarriosdev"),
+                    }                    
+                });
             });
 
             // Init IoC Services

@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Countries.SPA", "Countries.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{F2C951B3-4C10-4B28-B69B-252FF85379B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Countries.Common", "Countries.Common\Countries.Common.csproj", "{0417CBB8-B067-4878-8BA7-C8E33DED7DCD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Countries.Common", "Countries.Common\Countries.Common.csproj", "{0417CBB8-B067-4878-8BA7-C8E33DED7DCD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
