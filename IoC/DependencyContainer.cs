@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Services;
 using Application.Services.CustomRepositories;
 using Countries.Infra.Data.Repositories;
 using Countries.Infra.Data.Repositories.Generic;
@@ -12,6 +13,9 @@ namespace IoC
         {
             // Inject the service generic repository
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // Inject the service JWT
+            services.AddTransient<IJWTService, JWTService>();
 
             services.AddScoped<IForecastService, ForecastService>();
             services.AddScoped<IForecastRepository, ForecastRepository>();
