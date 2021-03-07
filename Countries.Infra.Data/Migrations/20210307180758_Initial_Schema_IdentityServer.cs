@@ -47,21 +47,6 @@ namespace Countries.Infra.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Forecast",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TemperatureC = table.Column<int>(type: "int", nullable: false),
-                    Summary = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Forecast", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -223,9 +208,6 @@ namespace Countries.Infra.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
-
-            migrationBuilder.DropTable(
-                name: "Forecast");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Countries.Infra.Data.Migrations
 {
     [DbContext(typeof(CountriesDbContext))]
-    [Migration("20210307012619_Initial_Schema_IdentityServer")]
-    partial class Initial_Schema_IdentityServer
+    [Migration("20210307181132_Countries_and_Subdivisions_Models")]
+    partial class Countries_and_Subdivisions_Models
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,25 +21,55 @@ namespace Countries.Infra.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Countries.Models.Models.WeatherForecast", b =>
+            modelBuilder.Entity("Countries.Models.Models.Country", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("CountryID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Alpha_2")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
 
-                    b.Property<string>("Summary")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Alpha_3")
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
 
-                    b.Property<int>("TemperatureC")
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("NumericCode")
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.HasKey("CountryID");
+
+                    b.ToTable("Country");
+                });
+
+            modelBuilder.Entity("Countries.Models.Models.Subdivision", b =>
+                {
+                    b.Property<int>("SubdivisonID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CountryID")
                         .HasColumnType("int");
 
-                    b.HasKey("ID");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
-                    b.ToTable("Forecast");
+                    b.HasKey("SubdivisonID");
+
+                    b.HasIndex("CountryID");
+
+                    b.ToTable("Subdivison");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -238,6 +268,17 @@ namespace Countries.Infra.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Countries.Models.Models.Subdivision", b =>
+                {
+                    b.HasOne("Countries.Models.Models.Country", "Country")
+                        .WithMany("Subdivisions")
+                        .HasForeignKey("CountryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -287,6 +328,11 @@ namespace Countries.Infra.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Countries.Models.Models.Country", b =>
+                {
+                    b.Navigation("Subdivisions");
                 });
 #pragma warning restore 612, 618
         }
