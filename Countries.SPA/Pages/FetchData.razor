@@ -1,11 +1,11 @@
 ﻿@page "/fetchdata"
-@inject Countries.SPA.Services.IForecastService _forecastService;
+
 
 <h1>Weather forecast</h1>
 
 <p>This component demonstrates fetching data from the server.</p>
 
-@if (forecasts == null)
+@if (true)
 {
     <p><em>Loading...</em></p>
 }
@@ -21,24 +21,11 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts.Forecasts)
-            {
-                <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
-                </tr>
-            }
+           
         </tbody>
     </table>
 }
 
 @code {
-    private Application.DTO.WeatherForecastDTO forecasts;
 
-    protected override async Task OnInitializedAsync()
-    {
-        forecasts = await this._forecastService.GetWeatherForecastDTOsAsync();
-    }   
 }

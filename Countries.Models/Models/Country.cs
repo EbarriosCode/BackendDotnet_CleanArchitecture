@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Countries.Models.Models
 {
@@ -22,7 +23,6 @@ namespace Countries.Models.Models
 
         [StringLength(3)]
         public string NumericCode { get; set; }
-
         public ICollection<Subdivision> Subdivisions { get; set; }
     }
 }

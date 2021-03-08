@@ -10,8 +10,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using System;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Countries.API
@@ -31,7 +33,7 @@ namespace Countries.API
             // Add Entity Framework DbContext
             services.AddDbContext<CountriesDbContext>(options => options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews();           
             services.AddRazorPages();
 
             // Indentity Server Configuration
@@ -79,9 +81,13 @@ namespace Countries.API
             DependencyContainer.AddDependency(services);
 
             // EnableCors
-            services.AddCors(c =>
+            services.AddCors(policy =>
             {
-                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+                policy.AddPolicy("CorsPolicy", opt => opt
+                 .AllowAnyOrigin()
+                 .AllowAnyHeader()
+                 .AllowAnyMethod()
+                 .WithExposedHeaders("X-Pagination"));
             });
         }
 
@@ -103,6 +109,11 @@ namespace Countries.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Countries.API v1"));
             }
+
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            };
 
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
