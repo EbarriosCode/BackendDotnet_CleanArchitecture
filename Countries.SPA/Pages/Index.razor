@@ -1,8 +1,80 @@
 ﻿@page "/"
+@inject ICountriesHttpService _service;
+@inject IJSRuntime _jsRuntime;
 @attribute [Authorize(Roles = "Admin")]
 
-<h1>Hello, world!</h1>
+<h1>Countries</h1>
 
-Welcome to your new app.
+<a href="/Country/Create" class="btn btn-info">Create</a>
+<br /><br />
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@if (this.countries == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Alpha 2</th>
+                <th>Alpha 3</th>
+                <th>Numeric Code</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var country in this.countries)
+            {
+                <tr>
+                    <td>@country.Name</td>
+                    <td>@country.Alpha_2</td>
+                    <td>@country.Alpha_3</td>
+                    <td>@country.NumericCode</td>
+                    <td>
+                        <a href="/Country/Edit/@country.CountryID" class="btn btn-success">Editar</a>
+                        <button class="btn btn-danger" @onclick="@(()=> DeleteCountry(country.CountryID))">Borrar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" />    
+}
+
+
+@code
+{
+    private List<CountryDTO> countries { get; set; } = new List<CountryDTO>();
+    public MetaData MetaData { get; set; } = new MetaData();
+    private CountryParameters _countryParameters = new CountryParameters();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCountries();
+    }
+
+    private async Task SelectedPage(int page)
+    {
+        _countryParameters.PageNumber = page;
+        await GetCountries();
+    }
+
+    private async Task GetCountries()
+    {
+        var pagingResponse = await this._service.GetCountriesDTOAsync(_countryParameters);
+        countries = pagingResponse.Items;
+        MetaData = pagingResponse.MetaData;
+    }
+
+    private async Task DeleteCountry(int CountryID)
+    {
+        var selectedCountry = this.countries.First(x => x.CountryID == CountryID);
+
+        if(await _jsRuntime.InvokeAsync<bool>("confirm", $"Are you sure to delete the record {selectedCountry.Name}?"))
+        {
+            await this._service.Delete(CountryID);
+            await GetCountries();
+        }
+    }
+}

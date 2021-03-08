@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -11,10 +11,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Countries.Common\Countries.Common.csproj" />
     <ProjectReference Include="..\Countries.Infra.Data\Countries.Infra.Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DTO\" />
   </ItemGroup>
 
 </Project>

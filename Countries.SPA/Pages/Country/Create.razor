@@ -1,0 +1,18 @@
+﻿@page "/Country/Create"
+@inject ICountriesHttpService _service;
+@inject NavigationManager uriHelper
+
+<h3 class="text-center">Create Country</h3>
+
+<FormCountries TextButton="Create" OnValidSubmit="@CreateCountry" country="@country"/>
+
+@code
+{    
+    private CountryDTO country = new CountryDTO();
+
+    private async Task CreateCountry()
+    {        
+        await this._service.Create(country);
+        uriHelper.NavigateTo("/");
+    }
+}

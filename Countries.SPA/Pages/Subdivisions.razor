@@ -1,0 +1,80 @@
+﻿@page "/Subdivisions"
+@inject ISubdivisionsHttpService _service;
+@inject IJSRuntime _jsRuntime;
+@attribute [Authorize(Roles = "Admin")]
+
+<h1>Subdivisions</h1>
+
+<a href="/Subdivisions/Create" class="btn btn-info">Create</a>
+<br />
+<br />
+
+@if (this.subdivisions == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Country ID</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var subdivision in this.subdivisions)
+            {
+                <tr>
+                    <td>@subdivision.Name</td>
+                    <td>@subdivision.CountryID</td>                    
+                    <td>
+                        <a href="/Subdivisions/Edit/@subdivision.SubdivisonID" class="btn btn-success">Editar</a>
+                        <button class="btn btn-danger" @onclick="@(()=> DeleteSubdivision(subdivision.SubdivisonID))">Borrar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" />
+
+}
+
+
+@code
+{
+    private List<SubdivisionDTO> subdivisions { get; set; } = new List<SubdivisionDTO>();
+    public MetaData MetaData { get; set; } = new MetaData();
+    private SubdivisionParameter _subdivisionsParameters = new SubdivisionParameter();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetSubdivisions();
+    }
+
+    private async Task SelectedPage(int page)
+    {
+        _subdivisionsParameters.PageNumber = page;
+        await GetSubdivisions();
+    }
+
+    private async Task GetSubdivisions()
+    {
+        var pagingResponse = await this._service.GetSubdivisionsDTOAsync(_subdivisionsParameters);
+        subdivisions = pagingResponse.Items;
+        MetaData = pagingResponse.MetaData;
+    }
+
+    private async Task DeleteSubdivision(int SubdivisionID)
+    {
+        var selectedCountry = this.subdivisions.First(x => x.SubdivisonID == SubdivisionID);
+
+        if (await _jsRuntime.InvokeAsync<bool>("confirm", $"Are you sure to delete the record {selectedCountry.Name}?"))
+        {
+            await this._service.Delete(SubdivisionID);
+            await GetSubdivisions();
+        }
+    }
+}
+
