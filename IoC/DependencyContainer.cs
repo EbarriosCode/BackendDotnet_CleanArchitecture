@@ -20,6 +20,10 @@ namespace IoC
             services.AddScoped<ICountriesService, CountriesService>();
             services.AddScoped<ICountriesRepository, CountriesRepository>();
 
+            // Inject the service Subdivisions            
+            services.AddScoped<ISubdivisionsService, SubdivisionsService>();
+            services.AddScoped<ISubdivisionsRepository, SubdivisionsRepository>();
+
             return services;
         }
     }
