@@ -13,4 +13,8 @@
     <ProjectReference Include="..\Countries.Infra.Data\Countries.Infra.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTO\" />
+  </ItemGroup>
+
 </Project>

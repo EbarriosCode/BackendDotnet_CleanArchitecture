@@ -3,46 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Countries.Infra.Data.Repositories.Generic
 {
     public interface IBaseRepository<T> where T : class
     {
-        #region Métodos Get 
         IEnumerable<T> Get(Expression<Func<T, bool>> whereCondition = null,
                            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
                            string includeProperties = "");
-
-        //T GetById(int id);
-        //Task<T> GetByIdAsync(int id);
-        #endregion Métodos Get
-
-        //#region Métodos Create
-        //T Create(T entity);
-        //Task<T> CreateAsync(T entity);
-        //#endregion Métodos Create
-
-        //#region Métodos Update
-        //T Update(T entity, object key);
-        //Task<T> UpdateAsync(T entity, object key);
-        //#endregion Métodos Update
-
-        //#region Métodos Delete
-        //void Delete(T entity);
-        //Task<int> DeleteAsync(T entity);
-        //#endregion Métodos Delete
-
-        //// Métodos para buscar objetos
-        //T Find(Expression<Func<T, bool>> match);
-        //ICollection<T> FindAll(Expression<Func<T, bool>> match);
-        //Task<ICollection<T>> FindAllAsync(Expression<Func<T, bool>> match);
-        //Task<T> FindAsync(Expression<Func<T, bool>> match);
-        //IQueryable<T> FindBy(Expression<Func<T, bool>> predicate);
-        //Task<ICollection<T>> FindByAsync(Expression<Func<T, bool>> predicate);
-
-        // Métodos para hacer Count de listas de objetos
-        //int Count();
-        //Task<int> CountAsync();
+        Task<T> CreateAsync(T entity);
+        Task<T> UpdateAsync(T entity, object key);
+        Task<int> DeleteAsync(T entity);
     }
     public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
     {
@@ -78,6 +50,36 @@ namespace Countries.Infra.Data.Repositories.Generic
             {
                 return query.ToList();
             }
+        }
+
+        public virtual async Task<T> CreateAsync(T model)
+        {
+            _unitOfWork.Context.Set<T>().Add(model);
+            await _unitOfWork.Context.SaveChangesAsync();
+
+            return model;
+        }
+
+        public virtual async Task<T> UpdateAsync(T model, object key)
+        {
+            if (model == null)
+                return null;
+
+            T exist = await _unitOfWork.Context.Set<T>().FindAsync(key);
+
+            if (exist != null)
+            {
+                _unitOfWork.Context.Entry(exist).CurrentValues.SetValues(model);
+                await _unitOfWork.Context.SaveChangesAsync();
+            }
+
+            return exist;
+        }
+
+        public virtual async Task<int> DeleteAsync(T model)
+        {
+            _unitOfWork.Context.Set<T>().Remove(model);
+            return await _unitOfWork.Context.SaveChangesAsync();
         }
     }
 }

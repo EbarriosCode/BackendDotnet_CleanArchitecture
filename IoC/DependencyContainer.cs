@@ -1,7 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Services;
-using Application.Services.CustomRepositories;
-using Countries.Infra.Data.Repositories;
+using Countries.Infra.Data.Repositories.Custom;
 using Countries.Infra.Data.Repositories.Generic;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,8 +16,9 @@ namespace IoC
             // Inject the service JWT
             services.AddTransient<IJWTService, JWTService>();
 
-            services.AddScoped<IForecastService, ForecastService>();
-            services.AddScoped<IForecastRepository, ForecastRepository>();
+            // Inject the service Countries            
+            services.AddScoped<ICountriesService, CountriesService>();
+            services.AddScoped<ICountriesRepository, CountriesRepository>();
 
             return services;
         }
