@@ -1,11 +1,12 @@
 ﻿@page "/Country/Edit/{CountryID:int}"
 @inject ICountriesHttpService _service;
 @inject NavigationManager uriHelper
+@attribute [Authorize(Roles = "Admin")]
 
 <h3 class="text-center">Edit</h3>
-<FormCountries TextButton="Edit" OnValidSubmit="@EditCountry" country="@country"/>
+<FormCountries TextButton="Edit" OnValidSubmit="@EditCountry" country="@country" />
 
-@code 
+@code
 {
     [Parameter] public int CountryID { get; set; }
     private CountryDTO country = new CountryDTO();

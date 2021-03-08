@@ -1,6 +1,7 @@
 ﻿@page "/Subdivisions/Create"
 @inject ISubdivisionsHttpService _service;
 @inject NavigationManager uriHelper
+@attribute [Authorize(Roles = "Admin")]
 
 <h3 class="text-center">Create Subdivision</h3>
 
