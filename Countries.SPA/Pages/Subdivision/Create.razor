@@ -1,0 +1,19 @@
+﻿@page "/Subdivisions/Create"
+@inject ISubdivisionsHttpService _service;
+@inject NavigationManager uriHelper
+@attribute [Authorize(Roles = "Admin")]
+
+<h3 class="text-center">Create Subdivision</h3>
+
+<FormSubdivisions TextButton="Create" OnValidSubmit="@CreateSubdivision" subdivision="@subdivision" />
+
+@code
+{
+    private SubdivisionDTO subdivision = new SubdivisionDTO();
+
+    private async Task CreateSubdivision()
+    {
+        await this._service.Create(subdivision);
+        uriHelper.NavigateTo("/Subdivisions");
+    }
+}

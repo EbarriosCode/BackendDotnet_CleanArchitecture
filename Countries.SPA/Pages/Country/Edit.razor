@@ -1,0 +1,24 @@
+﻿@page "/Country/Edit/{CountryID:int}"
+@inject ICountriesHttpService _service;
+@inject NavigationManager uriHelper
+@attribute [Authorize(Roles = "Admin")]
+
+<h3 class="text-center">Edit</h3>
+<FormCountries TextButton="Edit" OnValidSubmit="@EditCountry" country="@country" />
+
+@code
+{
+    [Parameter] public int CountryID { get; set; }
+    private CountryDTO country = new CountryDTO();
+
+    private async Task EditCountry()
+    {
+        await this._service.Update(country);
+        uriHelper.NavigateTo("/");
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        this.country = await this._service.GetByID(CountryID);
+    }
+}

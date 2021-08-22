@@ -1,0 +1,24 @@
+﻿@page "/Subdivisions/Edit/{SubdivisionID:int}"
+@inject ISubdivisionsHttpService _service;
+@inject NavigationManager uriHelper
+@attribute [Authorize(Roles = "Admin")]
+
+<h3 class="text-center">Edit</h3>
+<FormSubdivisions TextButton="Edit" OnValidSubmit="@EditSubdivision" subdivision="@subdivision" />
+
+@code
+{
+    [Parameter] public int SubdivisionID { get; set; }
+    private SubdivisionDTO subdivision = new SubdivisionDTO();
+
+    private async Task EditSubdivision()
+    {
+        await this._service.Update(subdivision);
+        uriHelper.NavigateTo("/Subdivisions");
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        this.subdivision = await this._service.GetByID(SubdivisionID);
+    }
+}

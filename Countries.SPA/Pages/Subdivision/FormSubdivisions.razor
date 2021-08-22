@@ -1,0 +1,49 @@
+﻿@inject ICountriesHttpService _service;
+
+<EditForm Model="@subdivision" OnValidSubmit="@OnValidSubmit" class="card card-body bg-light mt-5">
+    <DataAnnotationsValidator />
+    <div class="form-group row">
+        <label for="name" class="col-md-2 col-form-label">Name</label>
+        <div class="col-md-10">
+            <InputText id="name" Class="form-control" placeholder="Name" @bind-Value="subdivision.Name" />
+            <ValidationMessage For="@(()=> subdivision.Name)" class="text-danger" />
+        </div>
+    </div>    
+
+    <div class="form-group row">
+        <label for="numericCode" class="col-md-2 col-form-label">Country ID</label>
+        <div class="col-md-10">
+            <InputSelectNumber id="numericCode" 
+                               Class="form-control" 
+                               @bind-Value="@subdivision.CountryID">
+                <option value="0">-- Seleccione --</option>
+                @foreach(var item in countries)
+                    {
+                    <option value="@item.CountryID">@item.Name</option>
+                    }
+
+            </InputSelectNumber>
+            <ValidationMessage For="@(()=> subdivision.CountryID)" class="text-danger" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button type="submit" class="btn btn-success">
+                @TextButton
+            </button>
+        </div>
+    </div>
+</EditForm>
+
+@code
+{
+    [Parameter] public SubdivisionDTO subdivision { get; set; } = new SubdivisionDTO();
+    [Parameter] public string TextButton { get; set; }
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    private List<CountryDTO> countries = new List<CountryDTO>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        this.countries = await this._service.GetCountriesDTOAsync();
+    }
+}
