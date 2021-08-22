@@ -24,6 +24,7 @@ namespace Countries.UnitTests.Infastructure.Repositories.Tests.Countries
             // Assert
             Assert.NotNull(result);
             Assert.True(condition: result.Any());
+            Assert.True(result.Count() == 3);
 
             Assert.Equal("Francia", result.ElementAt(0).Name);
             Assert.Equal("Fr", result.ElementAt(0).Alpha_2);
